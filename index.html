@@ -1,1 +1,253 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainy Loved</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0A0514',
+                        darker: '#05020D',
+                        accent: '#4A1968',
+                        accentLight: '#7B2CBF',
+                        rose: '#E0AFA0',
+                        glow: '#C77DFF',
+                        heartPink: '#FF85B3',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 0 20px rgba(199, 125, 255, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+            }
+            .btn-3d {
+                transform-style: preserve-3d;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: 0 8px 0 #2A0E40, 0 10px 20px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2);
+                opacity: 0.85;
+            }
+            .btn-3d:hover {
+                opacity: 1;
+            }
+            .btn-3d:active {
+                transform: translate3d(0, 6px, 0);
+                box-shadow: 0 2px 0 #2A0E40, 0 4px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+                opacity: 1;
+            }
+            .btn-hover:hover {
+                transform: translate3d(0, -2px, 5px);
+                box-shadow: 0 12px 0 #2A0E40, 0 15px 25px rgba(123, 44, 191, 0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+            }
+            .progress-glow {
+                box-shadow: 0 0 15px rgba(199, 125, 255, 0.5);
+            }
+            .bg-video {
+                opacity: 0.5;
+            }
+            .placeholder-bg {
+                background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4b 50%, #150b26 100%);
+            }
+            /* Hearts rain animation */
+            .heart {
+                position: fixed;
+                top: -50px;
+                color: #FF85B3;
+                font-size: 1.2rem;
+                animation: fall linear infinite;
+                pointer-events: none;
+                z-index: 2;
+                opacity: 0.7;
+            }
+            @keyframes fall {
+                0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+                10% { opacity: 0.7; }
+                90% { opacity: 0.7; }
+                100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            }
+        }
+    </style>
+</head>
+<body class="bg-darker text-white min-h-screen overflow-x-hidden relative">
+    <!-- Background Video / Placeholder -->
+    <div class="fixed top-0 left-0 w-full h-full object-cover z-0 bg-video placeholder-bg">
+        <video class="w-full h-full object-cover" autoplay muted loop playsinline>
+            <source src="bg.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Overlay Gradient -->
+    <div class="fixed inset-0 bg-gradient-to-b from-dark/70 via-dark/50 to-darker/80 z-10 pointer-events-none"></div>
+
+    <!-- Hearts Rain Container -->
+    <div id="hearts-container" class="fixed inset-0 z-20 pointer-events-none overflow-hidden"></div>
+
+    <!-- Main Content -->
+    <div class="relative z-30 min-h-screen flex flex-col items-center justify-center px-4 py-16">
+        <!-- Title -->
+        <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-rose mb-12 text-shadow tracking-wider">
+            Rainy Loved
+        </h1>
+
+        <!-- Audio Player -->
+        <div class="w-full max-w-2xl mb-8">
+            <!-- Progress Bar -->
+            <div class="w-full h-3 bg-dark/60 rounded-full overflow-hidden border border-accent/30 cursor-pointer" id="progressContainer">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-accent to-glow rounded-full progress-glow w-0 transition-all duration-100"></div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="flex items-center justify-center gap-6 mt-4">
+                <button id="pauseBtn" class="flex items-center justify-center w-12 h-12 rounded-full bg-accent/40 hover:bg-accent/70 border border-glow/30 transition-all hover:scale-110 shadow-[0_0_15px_rgba(123,44,191,0.3)]">
+                    <i class="fa fa-pause text-glow text-xl"></i>
+                </button>
+                <span id="trackInfo" class="text-rose/80 italic">Select a memory below...</span>
+            </div>
+        </div>
+
+        <!-- 3D Buttons Column - 50% width, centered -->
+        <div class="flex flex-col gap-6 w-full max-w-[14rem]">
+            <button class="audio-btn btn-3d btn-hover w-full py-5 px-8 rounded-xl bg-gradient-to-br from-accent/90 to-darker border border-glow/20 text-xl font-semibold text-rose hover:text-white" data-src="4.mp3" data-title="Loved Teased">
+                Loved Teased
+            </button>
+            
+            <button class="audio-btn btn-3d btn-hover w-full py-5 px-8 rounded-xl bg-gradient-to-br from-accent/90 to-darker border border-glow/20 text-xl font-semibold text-rose hover:text-white" data-src="3.mp3" data-title="Hunger Deep">
+                Hunger Deep
+            </button>
+            
+            <button class="audio-btn btn-3d btn-hover w-full py-5 px-8 rounded-xl bg-gradient-to-br from-accent/90 to-darker border border-glow/20 text-xl font-semibold text-rose hover:text-white" data-src="2.mp3" data-title="Tricked Devoured">
+                Tricked Devoured
+            </button>
+            
+            <button class="audio-btn btn-3d btn-hover w-full py-5 px-8 rounded-xl bg-gradient-to-br from-accent/90 to-darker border border-glow/20 text-xl font-semibold text-rose hover:text-white" data-src="1.mp3" data-title="Naughty Feast">
+                Naughty Feast
+            </button>
+            
+            <button class="audio-btn btn-3d btn-hover w-full py-5 px-8 rounded-xl bg-gradient-to-br from-accentLight/90 to-accent border border-glow/40 text-xl font-semibold text-white hover:text-rose shadow-[0_0_20px_rgba(199,125,255,0.3)]" data-src="5.mp3" data-title="Special">
+                Special
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="audioPlayer" preload="metadata">
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const trackInfo = document.getElementById('trackInfo');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const audioButtons = document.querySelectorAll('.audio-btn');
+        let isPlaying = false;
+
+        // Button Click Handler
+        audioButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const src = btn.getAttribute('data-src');
+                const title = btn.getAttribute('data-title');
+                
+                if (audioPlayer.src !== new URL(src, window.location.href).href) {
+                    audioPlayer.src = src;
+                    trackInfo.textContent = `Now Playing: ${title}`;
+                    audioPlayer.play().catch(e => {
+                        trackInfo.textContent = `Ready: ${title} (click again or add file)`;
+                    });
+                    isPlaying = true;
+                } else {
+                    if (audioPlayer.paused) {
+                        audioPlayer.play().catch(e => {});
+                        isPlaying = true;
+                    } else {
+                        audioPlayer.pause();
+                        isPlaying = false;
+                    }
+                }
+                updatePauseIcon();
+            });
+        });
+
+        // Pause Button
+        pauseBtn.addEventListener('click', () => {
+            if (!audioPlayer.src) return;
+            
+            if (audioPlayer.paused) {
+                audioPlayer.play().catch(e => {});
+                isPlaying = true;
+            } else {
+                audioPlayer.pause();
+                isPlaying = false;
+            }
+            updatePauseIcon();
+        });
+
+        // Update Progress Bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = `${percent}%`;
+            }
+        });
+
+        // Seek on progress bar click
+        progressContainer.addEventListener('click', (e) => {
+            if (!audioPlayer.duration) return;
+            const rect = progressContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audioPlayer.currentTime = pos * audioPlayer.duration;
+        });
+
+        // Reset when track ends
+        audioPlayer.addEventListener('ended', () => {
+            progressBar.style.width = '0%';
+            trackInfo.textContent = 'Select a memory below...';
+            isPlaying = false;
+            updatePauseIcon();
+        });
+
+        function updatePauseIcon() {
+            const icon = pauseBtn.querySelector('i');
+            if (isPlaying) {
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+            } else {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        }
+
+        // Hearts Rain Animation
+        const heartsContainer = document.getElementById('hearts-container');
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart fa fa-heart';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDuration = `${Math.random() * 8 + 6}s`;
+            heart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
+            heart.style.opacity = `${Math.random() * 0.4 + 0.3}`;
+            
+            heartsContainer.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 14000);
+        }
+
+        // Generate hearts continuously
+        setInterval(createHeart, 350);
+    </script>
+</body>
+</html>
